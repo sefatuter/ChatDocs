@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PgDocSearch</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+  <link rel="alternate icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='upload.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-dark.min.css">
+
+</head>
+<body>
+  <div class="title-container">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="40" height="40">
+      <defs>
+        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#336791;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#1C3D59;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect x="6" y="8" width="20" height="26" fill="white" stroke="#336791" stroke-width="2" rx="3"/>
+      <polygon points="6,8 16,8 6,18" fill="#c9d1d9"/>
+      <rect x="24" y="28" width="10" height="3" fill="#1C3D59" transform="rotate(45 24 28)"/>
+      <circle cx="24" cy="24" r="8" fill="none" stroke="url(#grad1)" stroke-width="2"/>
+    </svg>
+    <h1>PgDocSearch</h1>
+  </div>
+
+  <div class="container">
+    <h1>Upload PDF or URL</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" enctype="multipart/form-data" id="uploadForm">
+      <div class="form-group">
+        <label for="pdf_file">PDF:</label>
+        <input type="file" name="pdf_file" id="pdf_file" accept=".pdf">
+      </div>
+      <div class="form-group">
+        <label for="website_url">URL:</label>
+        <input type="text" name="website_url" id="website_url" placeholder="https://example.com">
+      </div>
+      <div class="button-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        {% if documents_exist %}
+          <a href="{{ url_for('chat') }}" class="btn btn-secondary">Chat</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
+  <script>
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent default form submission
+
+      const form = this;
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      
+      // Show loading overlay
+      loadingOverlay.style.display = 'flex';
+
+      // Create FormData object for file upload
+      const formData = new FormData(form);
+
+      fetch('/', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Submission failed');
+        return response; // Flask redirects, so we don’t need JSON here
+      })
+      .then(() => {
+        // Redirect to chat page (handled by Flask)
+        window.location.href = "{{ url_for('chat') }}";
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Hide loading overlay on error
+        loadingOverlay.style.display = 'none';
+        // Optionally display an error message (e.g., via flash in Flask)
+      });
+    });
+  </script>
+</body>
+</html>

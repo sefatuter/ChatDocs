@@ -7,8 +7,8 @@ from retrieval_chain import get_response
 import uuid
 
 
-app = Flask(__name__)
-app.secret_key = 'your-secret-key'
+app = Flask(__name__, static_folder='static')
+app.secret_key = os.getenv("FLASK_SECRET", "your-secret-key")
 
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -86,7 +86,7 @@ def ask():
         return jsonify({"error": "No question provided"}), 400
 
     response = get_response(question)
-    response_html = markdown.markdown(response)  # Parse markdown to HTML
+    response_html = markdown.markdown(response, extensions=['fenced_code', 'codehilite'])
     
     # Save messages to the database
     with conn.cursor() as cur:

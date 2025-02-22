@@ -1,0 +1,323 @@
+:root {
+    --primary: #d73a49;
+    --primary-hover: #cb2431;
+    --secondary: #2d7dd2;
+    --secondary-hover: #3a8ed8;
+    --background: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --input-background: #1a1e24; /* Darker background for input, like GitHub Copilot */
+    --input-border: #3a3f4b; /* Subtle border for input */
+    --send-icon: #58a6ff; /* Blue for send icon, matching GitHub Copilot */
+    --send-icon-hover: #79c0ff;
+}
+
+/* Container for the input field and send button */
+.input-container {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Input field styling */
+input[type="text"] {
+    width: 100%;
+    padding: 8px 40px 8px 8px; /* Extra padding on the right for the send icon */
+    border-radius: 4px;
+    background-color: var(--input-background);
+    border: 1px solid var(--input-border);
+    color: var(--text);
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]::placeholder {
+    color: var(--muted);
+}
+
+input[type="text"]:focus {
+    border-color: var(--accent);
+    outline: none;
+}
+
+/* Send button styling */
+.send-button {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--send-icon);
+    transition: color 0.2s ease;
+}
+
+.send-button:hover {
+    color: var(--send-icon-hover);
+}
+
+/* Assuming the ▼ icon is an SVG or similar element */
+.send-button svg {
+    fill: currentColor;
+    width: 16px;
+    height: 16px;
+}
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    background-color: var(--background);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+    line-height: 1.6;
+    padding: 3rem;
+  }
+  
+  h1 {
+    color: var(--text);
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: 600;
+  }
+  
+  .chat-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    min-height: 0px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow-y: auto; /* Enable scrolling for long conversations */
+    /*visibility: hidden; /* Initially hidden */
+    /*opacity: 0;*/
+    transition: visibility 0.2s, opacity 0.2s ease-in-out;
+  }
+  
+  .user-message {
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+  
+  .assistant-message {
+    background: #21262d;
+    padding: 1.25rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    word-wrap: break-word;
+  }
+  
+  .input-group {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex; /* Use flexbox to align input and buttons */
+    align-items: center; /* Vertically center items */
+    gap: 0.5rem; /* Add spacing between input and buttons */
+    position: relative; /* For positioning the send icon inside the input */
+  }
+  .input-container {
+    position: relative; /* Allows absolute positioning of the button inside */
+    flex-grow: 1; /* Makes the input container take available space */
+  }
+  
+  
+  input[type="text"] {
+    width: 100%; /* Full width of the container */
+    padding: 8px 40px 8px 8px; /* Right padding for button space */
+    border-radius: 4px; /* Rounded corners */
+    background-color: #2a2a2a; /* Dark background */
+    color: #c9d1d9; /* Light text color */
+    border: 1px solid #444; /* Subtle border */
+  }
+  
+  input[type="text"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 5px rgba(88, 166, 255, 0.3);
+    outline: none;
+  }
+  
+  .send-icon {
+    position: absolute;
+    left: 0.75rem; /* Position inside the input field */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 8px solid var(--send-icon);
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+  }
+  
+  .send-icon:hover {
+    border-left-color: var(--send-icon-hover);
+  }
+  
+  .btn {
+    padding: 0.5rem 1.25rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .btn-primary {
+    background-color: var(--primary);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  
+  .btn-secondary {
+    background-color: var(--secondary);
+    color: white;
+  }
+  
+  .btn-secondary:hover {
+    background-color: var(--secondary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  
+  .btn-stop {
+    background-color: var(--stop);
+    color: white;
+    display: none; /* Hidden by default */
+  }
+  
+  .btn-stop:hover {
+    background-color: var(--stop-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  
+  #loading {
+    display: none;
+    text-align: center;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .send-button, .stop-button {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #c9d1d9;
+    transition: background-color 0.2s ease;
+    margin-top: 1px;
+  }
+  
+  .send-button:hover, .stop-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .send-button svg, .stop-button svg {
+    fill: currentColor;
+  }
+  .title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .title-container svg {
+    width: 64px;
+    height: 64px;
+    transition: transform 0.3s ease;
+  }
+
+  .title-container:hover svg {
+    transform: rotate(10deg) scale(1.1);
+  }
+
+  .title-container h1 {
+    margin: 0;
+  }
+  /* Loading Overlay Styles */
+  .chat-container {
+    position: relative; /* Needed so the overlay is positioned relative to the chatbox */
+    max-width: 1000px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    min-height: 0px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    transition: visibility 0.2s, opacity 0.2s ease-in-out;
+  }
+  
+  /* Loading Overlay adjusted for chat container only */
+  .loading-overlay {
+    position: absolute; /* Positioned within .chat-container */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* Semi-transparent overlay */
+    backdrop-filter: blur(2px); /* Optional: adjust blur if needed */
+    display: none; /* Show this via JavaScript when needed */
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--accent);
+    border-top: 5px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  

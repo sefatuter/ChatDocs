@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  ollama:
+    build: ./ollama
+    container_name: ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+    networks:
+      - mynetwork
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  postgres:
+    build: ./db
+    container_name: postgres_container
+    environment:
+      POSTGRES_DB: pgllm
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: psql1234
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - mynetwork
+    restart: always
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  flask-app:
+    build: ./app
+    container_name: flask_container
+    environment:
+      PG_DATABASE: pgllm
+      PG_USER: postgres
+      PG_PASSWORD: psql1234
+      PG_HOST: postgres
+      PG_PORT: "5432"
+      OLLAMA_API_BASE: http://ollama:11434
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+    networks:
+      - mynetwork
+    restart: always
+
+volumes:
+  pgdata:
+  ollama_data:
+
+networks:
+  mynetwork:
+    driver: bridge
