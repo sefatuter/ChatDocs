@@ -285,20 +285,36 @@
         margin: 0;
       }
       /* Loading Overlay Styles */
-    .loading-overlay {
-        position: fixed;
+      .chat-container {
+        position: relative; /* Needed so the overlay is positioned relative to the chatbox */
+        max-width: 1000px;
+        margin: 0 auto;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 2rem;
+        min-height: 0px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        overflow-y: auto;
+        transition: visibility 0.2s, opacity 0.2s ease-in-out;
+      }
+      
+      /* Loading Overlay adjusted for chat container only */
+      .loading-overlay {
+        position: absolute; /* Positioned within .chat-container */
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.7); /* Semi-transparent dark overlay */
-        backdrop-filter: blur(5px); /* Blurs the background */
-        display: none; /* Hidden by default */
+        background: rgba(0, 0, 0, 0.3); /* Semi-transparent overlay */
+        backdrop-filter: blur(2px); /* Optional: adjust blur if needed */
+        display: none; /* Show this via JavaScript when needed */
         justify-content: center;
         align-items: center;
-        z-index: 1000; /* Ensures it’s on top */
+        z-index: 10;
       }
-  
+      
       .spinner {
         width: 50px;
         height: 50px;
@@ -307,11 +323,12 @@
         border-radius: 50%;
         animation: spin 1s linear infinite;
       }
-  
+      
       @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
       }
+      
   </style>
 </head>
 <body>
@@ -331,43 +348,43 @@
         <h1>PgDocSearch - Assistant</h1>
     </div>
 
-  <div class="chat-container" id="chat-box">
-    <!-- Render previous chat history -->
-    {% for msg in chat_history %}
-      {% if msg.role == "user" %}
-        <div class="user-message">👤 You: {{ msg.message }}</div>
-      {% else %}
-        <div class="assistant-message markdown-body"><strong>🤖 Assistant:</strong> <span id="msg-{{ loop.index }}">{{ msg.message }}</span></div>
-        <script>
-          document.getElementById("msg-{{ loop.index }}").innerHTML = marked.parse(`{{ msg.message | safe }}`);
-        </script>
-      {% endif %}
-    {% endfor %}
-  </div>
-<!-- <div id="loading">Loading response...</div>  -->
-<div class="input-group">
-    <div class="input-container">
-        <input type="text" id="question" placeholder="Ask your question...">
-        <button class="send-button" title="Send" onclick="askQuestion()">
-          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" class="octicon octicon-paper-airplane">
-            <path d="M.989 8 .064 2.68a1.342 1.342 0 0 1 1.85-1.462l13.402 5.744a1.13 1.13 0 0 1 0 2.076L1.913 14.782a1.343 1.343 0 0 1-1.85-1.463L.99 8Zm.603-5.288L2.38 7.25h4.87a.75.75 0 0 1 0 1.5H2.38l-.788 4.538L13.929 8Z"></path>
-          </svg>
-        </button>
-        <button class="stop-button" id="stopBtn" title="Stop" onclick="stopRequest()" style="display: none;">
-          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" class="octicon octicon-stop">
-            <path d="M4.5 4.5h7v7h-7z"></path>
-          </svg>
-        </button>
-    </div>
-    <button class="btn btn-primary" onclick="resetAndGoBack()">🗑️ Reset</button>
-    <button class="btn btn-secondary" onclick="goBack()">🔙 Back</button>
-</div>
-
-    <!-- Loading Overlay -->
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="spinner"></div>
-  </div>
-
+    <div class="chat-container" id="chat-box">
+        <!-- Render previous chat history -->
+        {% for msg in chat_history %}
+          {% if msg.role == "user" %}
+            <div class="user-message">👤 You: {{ msg.message }}</div>
+          {% else %}
+            <div class="assistant-message markdown-body">
+              <strong>🤖 Assistant:</strong> 
+              <span class="message-content">{{ msg.message|safe }}</span>
+            </div>
+          {% endif %}
+        {% endfor %}
+        
+        <!-- Loading Overlay within chat container -->
+        <div class="loading-overlay" id="loadingOverlay">
+          <div class="spinner"></div>
+        </div>
+      </div>
+        
+      <div class="input-group">
+        <div class="input-container">
+          <input type="text" id="question" placeholder="Ask your question...">
+          <button class="send-button" title="Send" onclick="askQuestion()">
+            <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16">
+              <path d="M.989 8 .064 2.68a1.342 1.342 0 0 1 1.85-1.462l13.402 5.744a1.13 1.13 0 0 1 0 2.076L1.913 14.782a1.343 1.343 0 0 1-1.85-1.463L.99 8Zm.603-5.288L2.38 7.25h4.87a.75.75 0 0 1 0 1.5H2.38l-.788 4.538L13.929 8Z"></path>
+            </svg>
+          </button>
+          <button class="stop-button" id="stopBtn" title="Stop" onclick="stopRequest()" style="display: none;">
+            <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16">
+              <path d="M4.5 4.5h7v7h-7z"></path>
+            </svg>
+          </button>
+        </div>
+        <button class="btn btn-primary" onclick="resetAndGoBack()">🗑️ Reset</button>
+        <button class="btn btn-secondary" onclick="goBack()">🔙 Back</button>
+      </div>
+      
   <script>
     let controller = null;
     let sendButton = document.querySelector(".send-button");
