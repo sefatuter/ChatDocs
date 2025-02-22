@@ -1,29 +1,12 @@
 # retrieval_chain.py
 from langchain_ollama import OllamaLLM
-from langchain.chains import ConversationalRetrievalChain
-from langchain.prompts import PromptTemplate
 from vector_store import search_documents
 from config import OLLAMA_BASE_URL, OLLAMA_MODEL
+import re
+
 
 # Initialize Ollama LLM
 ollama = OllamaLLM(base_url=OLLAMA_BASE_URL, model=OLLAMA_MODEL)
-
-# Define system prompt template
-system_instruction = """
-You are an expert in PostgreSQL. Use the retrieved context to answer the user's question.
-
-Provide:
-1. A clear and concise explanation.
-2. Relevant SQL commands and syntax.
-3. Best practices and security recommendations.
-
-Ensure responses are formatted properly in Markdown.
-"""
-
-prompt_template = PromptTemplate(
-    input_variables=["context", "question"],
-    template=system_instruction + "\n\nContext:\n{context}\n\nUser Question:\n{question}"
-)
 
 def get_response(question, chat_history=[]):
     """Retrieve relevant documents and generate a response"""
@@ -31,30 +14,36 @@ def get_response(question, chat_history=[]):
     
     # Extract content from retrieved documents
     context = "\n\n".join([doc[1] for doc in retrieved_docs]) 
-    print("===================================================================")
-    print(context) 
-    print("===================================================================")
+    context = re.sub(r'\n{2,}', '\n', context)
+    #Debug
+    # print("===================================================================")
+    # print(context) 
+    # print("===================================================================")
 
     # ✅ Properly formatted input for Ollama
     formatted_prompt = f"""
-    You are an expert in PostgreSQL. Use the retrieved context to answer the user's question.
+        You are a highly efficient assistant with expertise in analyzing diverse documents. Use the provided context to answer the user's question as accurately and concisely as possible.
 
-    Context:
-    {context}
+        **Context**:  
+        {context}
 
-    User Question:
-    {question}
+        **User Question**:  
+        {question}
 
-    Provide:
-    1. A clear,step by step and concise explanation.
-    2. Relevant SQL commands and syntax.
-    3. Best practices and security recommendations.
+        **Instructions**:  
+        1. Provide a concise, step-by-step explanation based on the context.  
+        2. Include relevant examples, code, or commands (e.g., SQL if applicable) with proper syntax.  
+        3. Highlight efficiency tips, best practices, or key insights relevant to the context.  
 
-    Ensure responses are formatted properly in Markdown.
+        **Response Format**:  
+        - Use Markdown for clarity and structure.  
+        - If the context is insufficient or irrelevant, respond with: *'I don’t have enough information to answer this based on the provided context.'*
 
-    If the context is not relevant, respond with 'I don't know'.
-    """
-
+        Keep the response focused, actionable, and optimized for the user’s needs.
+        """
+    # Debug
+    # print("---------------------------------------------------------------")
+    # print(formatted_prompt)
     response = ollama.invoke(formatted_prompt, options={"num_ctx": 8192, "temperature": 0.5})
     return response
 

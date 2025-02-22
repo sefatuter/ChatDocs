@@ -44,19 +44,32 @@ def create_table():
                     content TEXT,
                     embedding VECTOR(384)
                 );
+                CREATE TABLE IF NOT EXISTS chat_history (
+                    id SERIAL PRIMARY KEY,
+                    session_id VARCHAR(255) NOT NULL,
+                    role TEXT NOT NULL,
+                    message TEXT NOT NULL
+                );
             """)
         conn.commit()
 
 create_table()
 
 def store_documents(documents):
-    """Splits documents into chunks, generates embeddings, and stores them in PostgreSQL"""
+    """Splits documents into chunks, generates embeddings, and stores them in PostgreSQL.
+    Prevents duplicate uploads by checking if the content already exists.
+    """
     all_splits = text_splitter.split_documents(documents)
     
     with conn.cursor() as cur:
         for doc in all_splits:
             heading = doc.metadata.get("source", "Unknown")
             content = doc.page_content
+            
+            cur.execute("SELECT 1 FROM structured_documents WHERE content = %s", (content,))
+            if cur.fetchone() is not None:
+                continue
+
             embedding = np.array(embedding_model.embed_query(content)).tolist()
 
             cur.execute("""
@@ -65,6 +78,7 @@ def store_documents(documents):
             """, (heading, content, embedding))
     
         conn.commit()
+
 
 def search_documents(query, top_n=5):
     """Search for relevant documents using pgvector"""

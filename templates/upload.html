@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Docs - PgDocSearch</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-dark.min.css">
+  <style>
+    :root {
+      --primary: #238636;
+      --primary-hover: #2ea043;
+      --secondary: #2d7dd2;
+      --secondary-hover: #3a8ed8;
+      --background: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --error: #ff4444;
+      --accent: #58a6ff;
+      --glow: rgba(88, 166, 255, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+      line-height: 1.5;
+      padding: 2rem; /* Medium: between 3rem and 1.5rem */
+    }
+
+    .container {
+      max-width: 600px; /* Medium: between 700px and 500px */
+      margin: 0 auto;
+      background: var(--surface);
+      padding: 2rem; /* Medium: between 2.5rem and 1.5rem */
+      border-radius: 10px; /* Medium: between 12px and 8px */
+      border: 1px solid var(--border);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15); /* Medium shadow */
+    }
+
+    h1 {
+      color: var(--text);
+      font-size: 1.75rem; /* Medium: between 2rem and 1.5rem */
+      margin-bottom: 1.5rem; /* Medium: between 2rem and 1rem */
+      text-align: center;
+      font-weight: 600;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Medium shadow */
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem; /* Medium: between 2rem and 1rem */
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.6rem; /* Medium: between 0.75rem and 0.5rem */
+      font-weight: 500;
+      color: var(--text);
+      font-size: 0.95rem; /* Medium: between default and 0.9rem */
+    }
+
+    input[type="file"],
+    input[type="text"] {
+      width: 100%;
+      padding: 0.7rem; /* Medium: between 0.875rem and 0.5rem */
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 5px; /* Medium: between 6px and 4px */
+      color: var(--text);
+      font-size: 0.95rem; /* Medium: between 1rem and 0.9rem */
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input[type="file"]::file-selector-button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.4rem 0.9rem; /* Medium: between 0.5rem 1rem and 0.3rem 0.75rem */
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-size: 0.9rem; /* Medium: between default and 0.85rem */
+    }
+
+    input[type="file"]::file-selector-button:hover {
+      background: var(--primary-hover);
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 6px var(--glow); /* Medium: between 8px and 5px */
+      outline: none;
+    }
+
+    input[type="text"]::placeholder {
+      color: #8b949e;
+      opacity: 0.8;
+      font-style: italic;
+      font-size: 0.9rem; /* Medium: between default and 0.85rem */
+    }
+
+    .btn {
+      padding: 0.6rem 1.25rem; /* Medium: between 0.75rem 1.5rem and 0.5rem 1rem */
+      border: none;
+      border-radius: 5px; /* Medium: between 6px and 4px */
+      font-size: 0.9rem; /* Medium: between 0.9rem and 0.85rem */
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Medium shadow */
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-hover), var(--primary));
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Medium shadow */
+      filter: brightness(1.1);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--secondary), var(--secondary-hover));
+      color: white;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background: linear-gradient(135deg, var(--secondary-hover), var(--secondary));
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Medium shadow */
+      filter: brightness(1.1);
+    }
+
+    .flash-message {
+      color: var(--error);
+      padding: 1rem; /* Medium: between 1.25rem and 0.75rem */
+      margin-bottom: 1.5rem; /* Medium: between 2rem and 1rem */
+      border: 1px solid var(--error);
+      border-radius: 5px; /* Medium: between 6px and 4px */
+      background-color: rgba(255, 68, 68, 0.1);
+      font-weight: 500;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out;
+      font-size: 0.95rem; /* Medium: between default and 0.9rem */
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-7px); } /* Medium: between -10px and -5px */
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .title-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      margin-bottom: 1.5rem; /* Medium: between 2rem and 1rem */
+    }
+
+    .title-container svg {
+      width: 56px; /* Medium: between 64px and 48px */
+      height: 56px; /* Medium: between 64px and 48px */
+      transition: transform 0.3s ease;
+    }
+
+    .title-container:hover svg {
+      transform: rotate(10deg) scale(1.1);
+    }
+
+    .title-container h1 {
+      margin: 0;
+      font-size: 1.75rem; /* Match container h1 size */
+    }
+
+    .button-group {
+      display: flex;
+      gap: 0.9rem; /* Medium: between 1rem and 0.75rem */
+      justify-content: center;
+      margin-top: 1.25rem; /* Medium: between 1.5rem and 1rem */
+    }
+  </style>
+</head>
+<body>
+  <div class="title-container">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="40" height="40">
+      <defs>
+        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#336791;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#1C3D59;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect x="6" y="8" width="20" height="26" fill="white" stroke="#336791" stroke-width="2" rx="3"/>
+      <polygon points="6,8 16,8 6,18" fill="#c9d1d9"/>
+      <rect x="24" y="28" width="10" height="3" fill="#1C3D59" transform="rotate(45 24 28)"/>
+      <circle cx="24" cy="24" r="8" fill="none" stroke="url(#grad1)" stroke-width="2"/>
+    </svg>
+    <h1>PgDocSearch</h1>
+  </div>
+
+  <div class="container">
+    <h1>Upload PDF or URL</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="pdf_file">PDF:</label>
+        <input type="file" name="pdf_file" id="pdf_file" accept=".pdf">
+      </div>
+      <div class="form-group">
+        <label for="website_url">URL:</label>
+        <input type="text" name="website_url" id="website_url" placeholder="https://example.com">
+      </div>
+      <div class="button-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        {% if documents_exist %}
+          <a href="{{ url_for('chat') }}" class="btn btn-secondary">Chat</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</body>
+</html>
