@@ -30,49 +30,50 @@
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
       line-height: 1.5;
-      padding: 2rem; /* Medium: between 3rem and 1.5rem */
+      padding: 2rem;
     }
 
     .container {
-      max-width: 600px; /* Medium: between 700px and 500px */
+      max-width: 600px;
       margin: 0 auto;
       background: var(--surface);
-      padding: 2rem; /* Medium: between 2.5rem and 1.5rem */
-      border-radius: 10px; /* Medium: between 12px and 8px */
+      padding: 2rem;
+      border-radius: 10px;
       border: 1px solid var(--border);
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15); /* Medium shadow */
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+      position: relative; /* For z-index context */
     }
 
     h1 {
       color: var(--text);
-      font-size: 1.75rem; /* Medium: between 2rem and 1.5rem */
-      margin-bottom: 1.5rem; /* Medium: between 2rem and 1rem */
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
       text-align: center;
       font-weight: 600;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Medium shadow */
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
     .form-group {
-      margin-bottom: 1.5rem; /* Medium: between 2rem and 1rem */
+      margin-bottom: 1.5rem;
     }
 
     label {
       display: block;
-      margin-bottom: 0.6rem; /* Medium: between 0.75rem and 0.5rem */
+      margin-bottom: 0.6rem;
       font-weight: 500;
       color: var(--text);
-      font-size: 0.95rem; /* Medium: between default and 0.9rem */
+      font-size: 0.95rem;
     }
 
     input[type="file"],
     input[type="text"] {
       width: 100%;
-      padding: 0.7rem; /* Medium: between 0.875rem and 0.5rem */
+      padding: 0.7rem;
       background: var(--background);
       border: 1px solid var(--border);
-      border-radius: 5px; /* Medium: between 6px and 4px */
+      border-radius: 5px;
       color: var(--text);
-      font-size: 0.95rem; /* Medium: between 1rem and 0.9rem */
+      font-size: 0.95rem;
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
@@ -80,11 +81,11 @@
       background: var(--primary);
       color: white;
       border: none;
-      padding: 0.4rem 0.9rem; /* Medium: between 0.5rem 1rem and 0.3rem 0.75rem */
+      padding: 0.4rem 0.9rem;
       border-radius: 3px;
       cursor: pointer;
       transition: background 0.3s ease;
-      font-size: 0.9rem; /* Medium: between default and 0.85rem */
+      font-size: 0.9rem;
     }
 
     input[type="file"]::file-selector-button:hover {
@@ -93,7 +94,7 @@
 
     input[type="text"]:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 6px var(--glow); /* Medium: between 8px and 5px */
+      box-shadow: 0 0 6px var(--glow);
       outline: none;
     }
 
@@ -101,21 +102,21 @@
       color: #8b949e;
       opacity: 0.8;
       font-style: italic;
-      font-size: 0.9rem; /* Medium: between default and 0.85rem */
+      font-size: 0.9rem;
     }
 
     .btn {
-      padding: 0.6rem 1.25rem; /* Medium: between 0.75rem 1.5rem and 0.5rem 1rem */
+      padding: 0.6rem 1.25rem;
       border: none;
-      border-radius: 5px; /* Medium: between 6px and 4px */
-      font-size: 0.9rem; /* Medium: between 0.9rem and 0.85rem */
+      border-radius: 5px;
+      font-size: 0.9rem;
       font-weight: 600;
       text-align: center;
       cursor: pointer;
       transition: all 0.3s ease;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Medium shadow */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .btn-primary {
@@ -126,7 +127,7 @@
     .btn-primary:hover {
       background: linear-gradient(135deg, var(--primary-hover), var(--primary));
       transform: translateY(-2px);
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Medium shadow */
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
       filter: brightness(1.1);
     }
 
@@ -139,25 +140,25 @@
     .btn-secondary:hover {
       background: linear-gradient(135deg, var(--secondary-hover), var(--secondary));
       transform: translateY(-2px);
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Medium shadow */
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
       filter: brightness(1.1);
     }
 
     .flash-message {
       color: var(--error);
-      padding: 1rem; /* Medium: between 1.25rem and 0.75rem */
-      margin-bottom: 1.5rem; /* Medium: between 2rem and 1rem */
+      padding: 1rem;
+      margin-bottom: 1.5rem;
       border: 1px solid var(--error);
-      border-radius: 5px; /* Medium: between 6px and 4px */
+      border-radius: 5px;
       background-color: rgba(255, 68, 68, 0.1);
       font-weight: 500;
       text-align: center;
       animation: fadeIn 0.5s ease-in-out;
-      font-size: 0.95rem; /* Medium: between default and 0.9rem */
+      font-size: 0.95rem;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-7px); } /* Medium: between -10px and -5px */
+      from { opacity: 0; transform: translateY(-7px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -166,12 +167,12 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      margin-bottom: 1.5rem; /* Medium: between 2rem and 1rem */
+      margin-bottom: 1.5rem;
     }
 
     .title-container svg {
-      width: 56px; /* Medium: between 64px and 48px */
-      height: 56px; /* Medium: between 64px and 48px */
+      width: 56px;
+      height: 56px;
       transition: transform 0.3s ease;
     }
 
@@ -181,14 +182,43 @@
 
     .title-container h1 {
       margin: 0;
-      font-size: 1.75rem; /* Match container h1 size */
+      font-size: 1.75rem;
     }
 
     .button-group {
       display: flex;
-      gap: 0.9rem; /* Medium: between 1rem and 0.75rem */
+      gap: 0.9rem;
       justify-content: center;
-      margin-top: 1.25rem; /* Medium: between 1.5rem and 1rem */
+      margin-top: 1.25rem;
+    }
+
+    /* Loading Overlay Styles */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7); /* Semi-transparent dark overlay */
+      backdrop-filter: blur(5px); /* Blurs the background */
+      display: none; /* Hidden by default */
+      justify-content: center;
+      align-items: center;
+      z-index: 1000; /* Ensures it’s on top */
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid var(--accent);
+      border-top: 5px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
@@ -220,7 +250,7 @@
       {% endif %}
     {% endwith %}
 
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" id="uploadForm">
       <div class="form-group">
         <label for="pdf_file">PDF:</label>
         <input type="file" name="pdf_file" id="pdf_file" accept=".pdf">
@@ -237,5 +267,44 @@
       </div>
     </form>
   </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
+  <script>
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent default form submission
+
+      const form = this;
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      
+      // Show loading overlay
+      loadingOverlay.style.display = 'flex';
+
+      // Create FormData object for file upload
+      const formData = new FormData(form);
+
+      fetch('/', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Submission failed');
+        return response; // Flask redirects, so we don’t need JSON here
+      })
+      .then(() => {
+        // Redirect to chat page (handled by Flask)
+        window.location.href = "{{ url_for('chat') }}";
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Hide loading overlay on error
+        loadingOverlay.style.display = 'none';
+        // Optionally display an error message (e.g., via flash in Flask)
+      });
+    });
+  </script>
 </body>
 </html>

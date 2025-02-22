@@ -284,6 +284,34 @@
       .title-container h1 {
         margin: 0;
       }
+      /* Loading Overlay Styles */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7); /* Semi-transparent dark overlay */
+        backdrop-filter: blur(5px); /* Blurs the background */
+        display: none; /* Hidden by default */
+        justify-content: center;
+        align-items: center;
+        z-index: 1000; /* Ensures it’s on top */
+      }
+  
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid var(--accent);
+        border-top: 5px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+  
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
   </style>
 </head>
 <body>
@@ -316,7 +344,7 @@
       {% endif %}
     {% endfor %}
   </div>
-  <div id="loading">Loading response...</div>
+<!-- <div id="loading">Loading response...</div>  -->
 <div class="input-group">
     <div class="input-container">
         <input type="text" id="question" placeholder="Ask your question...">
@@ -334,6 +362,11 @@
     <button class="btn btn-primary" onclick="resetAndGoBack()">🗑️ Reset</button>
     <button class="btn btn-secondary" onclick="goBack()">🔙 Back</button>
 </div>
+
+    <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
 
   <script>
     let controller = null;
@@ -369,7 +402,7 @@
       if (!question.trim()) return;
 
       let chatBox = document.getElementById("chat-box");
-      let loadingIndicator = document.getElementById("loading");
+      let loadingIndicator = document.getElementById("loadingOverlay");
       let stopBtn = document.getElementById("stopBtn");
 
       chatBox.innerHTML += `<div class="user-message">👤 You: ${question}</div>`;
@@ -377,6 +410,7 @@
       loadingIndicator.style.display = "block";
       scrollToBottom();
 
+      loadingOverlay.style.display = "flex";
       // Show stop button
       stopBtn.style.display = "inline-block";
       sendButton.style.display = "none";
@@ -395,7 +429,7 @@
         return response.json();
       })
       .then(data => {
-        loadingIndicator.style.display = "none";
+        loadingOverlay.style.display = "none";
         stopBtn.style.display = "none";
         sendButton.style.display = "inline-block";
         if (data.response) {
@@ -406,7 +440,7 @@
         }
       })
       .catch(error => {
-        loadingIndicator.style.display = "none";
+        loadingOverlay.style.display = "none";;
         stopBtn.style.display = "none";
         sendButton.style.display = "inline-block";
         if (error.name !== 'AbortError') {
@@ -423,6 +457,7 @@
         if (controller) {
             controller.abort();
             controller = null;
+            document.getElementById("loadingOverlay").style.display = "none";
             document.getElementById("stopBtn").style.display = "none";
             sendButton.style.display = "inline-block";
         }
