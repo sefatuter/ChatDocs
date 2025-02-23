@@ -1,10 +1,9 @@
 # ChatDocs 📄
-
-ChatDocs is an AI-powered tool designed to help you interact naturally with your documents and data. Upload PDFs, text files, spreadsheets, or other data sources, and ChatDocs will enable you to ask questions, extract insights, and get quick, accurate answers. This project simplifies access to information, making your data more actionable and accessible.
+ChatDocs is an AI-powered tool for natural interaction with docs & data. Upload PDFs and/or URLs, and ask questions, extract insights, or get fast, accurate answers. Simplifies data access, runs locally for privacy, and uses vector embedding and LLM for efficient, precise processing.
 
 ## Features ✨
 
-- **Works with All Kinds of Files**: Toss in whatever you’ve got—PDFs, text files, Word docs. If it’s a file, ChatDocs can probably handle it.
+- **Works with All Kinds of Files**: Toss in whatever you’ve got—PDFs or web pages. ChatDocs can probably handle it.
 - **Chats Like a Buddy**: Have a real conversation with your docs and data. Ask questions, get answers—it’s like talking to a super-smart friend who’s read everything. 🗣️
 - **Fast Insights, No Sweat**: Need a quick summary or the juicy bits from your content? ChatDocs pulls it out in seconds, no digging required.
 - **Easy for Everyone**: Whether you’re a tech newbie or a pro, the interface is simple and friendly.
