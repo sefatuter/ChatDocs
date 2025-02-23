@@ -4,6 +4,7 @@ services:
   ollama:
     build: ./ollama
     container_name: ollama
+    image: usersefa/chatdocs-ollama:latest
     volumes:
       - ollama_data:/root/.ollama
     ports:
@@ -22,6 +23,7 @@ services:
   postgres:
     build: ./db
     container_name: postgres_container
+    image: usersefa/chatdocs-postgres:latest
     environment:
       POSTGRES_DB: pgllm
       POSTGRES_USER: postgres
@@ -42,6 +44,7 @@ services:
   flask-app:
     build: ./app
     container_name: flask_container
+    image: usersefa/chatdocs-flask-app:latest
     environment:
       PG_DATABASE: pgllm
       PG_USER: postgres
