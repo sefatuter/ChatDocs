@@ -1,20 +1,9 @@
-FROM postgres:16.7
+FROM postgres:17
 
-RUN apt-get update && apt-get install -y \
-    postgresql-server-dev-16 \
-    postgresql-common \
-    gcc \
-    make \
-    git
-
-RUN cd /tmp && \
-    git clone --branch v0.5.0 https://github.com/pgvector/pgvector.git && \
-    cd pgvector && \
-    make && \
-    make install && \
-    rm -rf /tmp/pgvector  # Clean up to reduce image size
-
-RUN echo "CREATE EXTENSION IF NOT EXISTS vector;" >> /docker-entrypoint-initdb.d/init.sql
+RUN apt-get update && apt install postgresql-17-pgvector && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+    
+COPY ..db/init.sql /docker-entrypoint-initdb.d/init.sql
 
 ENV POSTGRES_DB=pgllm
 ENV POSTGRES_USER=postgres
