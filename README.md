@@ -1,59 +1,68 @@
-**ChatDocs** harika bir seçim! Kısa, net ve projenin amacını çok iyi yansıtıyor: belgelerle sohbet etmek. "Chat" ve "Docs" kelimelerinin birleşimi, kullanımı kolay ve akılda kalıcı bir isim ortaya çıkarıyor. Ayrıca, her türlü doküman ve veriyle çalışabilme fikrine de uyum sağlıyor.
+# ChatDocs 📄
 
-Şimdi, ChatDocs ismiyle önceki README taslağını güncelleyeyim ve projenin genel kapsayıcı yapısını vurgulayayım:
+ChatDocs is an AI-powered tool designed to help you interact naturally with your documents and data. Upload PDFs, text files, spreadsheets, or other data sources, and ChatDocs will enable you to ask questions, extract insights, and get quick, accurate answers. This project simplifies access to information, making your data more actionable and accessible.
 
----
+## Features ✨
 
-# ChatDocs
+- **Works with All Kinds of Files**: Toss in whatever you’ve got—PDFs, text files, Word docs. If it’s a file, ChatDocs can probably handle it.
+- **Chats Like a Buddy**: Have a real conversation with your docs and data. Ask questions, get answers—it’s like talking to a super-smart friend who’s read everything. 🗣️
+- **Fast Insights, No Sweat**: Need a quick summary or the juicy bits from your content? ChatDocs pulls it out in seconds, no digging required.
+- **Easy for Everyone**: Whether you’re a tech newbie or a pro, the interface is simple and friendly.
 
-ChatDocs, her türlü doküman ve verinizle doğal bir şekilde sohbet etmenizi sağlayan güçlü bir araçtır. PDF'ler, metin dosyaları, spreadsheet'ler veya diğer veri kaynaklarınızı yükleyerek içeriği anlamlandırabilir, sorular sorabilir ve hızlı cevaplar alabilirsiniz. Yapay zeka destekli bu proje, bilgiye erişimi kolaylaştırmayı ve verilerinizden maksimum fayda sağlamayı amaçlar.
+## Installation 🚀
 
-## Özellikler
-- **Çok Yönlü Dosya Desteği:** PDF, TXT, CSV, DOCX ve daha fazla formatta dosya yükleme.
-- **Akıllı Sohbet:** Belgeleriniz ve verilerinizle gerçek zamanlı, doğal bir diyalog.
-- **Hızlı Analiz:** İçerikten anında özetler ve bilgiler çıkarma.
-- **Esnek Kullanım:** Kullanıcı dostu arayüzle her seviyeden kullanıcıya hitap eder.
+Follow these steps to get ChatDocs up and running:
 
-## Kurulum
-
-1. **Depoyu Klonlayın:**
+1. **Clone the Repository**:
    ```bash
    git clone https://github.com/sefatuter/ChatDocs.git
    cd ChatDocs
    ```
    
-2. **Uygulamayı Çalıştırın:**
-   Uygulamayı başlatmak için:
+2. **Run the Application:**
+   To start the application:
+
    ```bash
    docker compose up -d
    ```
 
-   *(Not: Çalıştırma komutu projenize özelse, burayı güncelleyebilirsiniz.)*
+   Or you can pull images and compose without build:
 
-## Kullanım
+    - ```bash
+      docker pull usersefa/chatdocs-postgres
+      docker pull usersefa/chatdocs-flask-app
+      docker pull usersefa/chatdocs-ollama
+      ```
+    - ```bash
+      docker-compose up -d
+      ```
+ 3. **Go to page:**
+    Open your browser and head to ```http://localhost:5000``` to start chatting.
 
-1. ChatDocs’u çalıştırdıktan sonra, belgelerinizi veya verilerinizi "Dosya Yükle" seçeneğiyle ekleyin.
-2. Sohbet alanına sorularınızı yazın (örneğin, "Bu dosyada ne var?" ya da "Verileri özetle").
-3. ChatDocs, yüklediğiniz içeriklerden yola çıkarak size doğal ve doğru cevaplar sunar.
 
-## Katkıda Bulunma
 
-Projeye katkıda bulunmak isterseniz:
-- Depoyu forklayın.
-- Yeni özellikler veya düzeltmeler için bir dal (branch) oluşturun.
-- Değişikliklerinizi bir pull request ile paylaşın.
+## Usage
 
-Fikirleriniz ve geri bildirimleriniz için lütfen bir "issue" açmaktan çekinmeyin!
+1. Launch ChatDocs by running the installation steps above.
+2. Upload your documents or website url.
+3. Ask questions in the chat interface, such as "What’s in this file?" or "Summarize this data."
+4. ChatDocs will respond with natural, context-aware answers based on your uploaded content.
 
-## Lisans
+## Contribution
 
-Bu proje [MIT Lisansı](LICENSE) ile lisanslanmıştır. Detaylar için lisans dosyasını inceleyebilirsiniz.
+If you want to contribute to the project:
+- Fork the repository.
+- Create a branch for new features or fixes.
+- Share your changes with a pull request.
 
-## İletişim
+Please feel free to open an “issue” with your ideas and feedback!
 
-Sorularınız veya destek talepleriniz için: [sefatuter@example.com](mailto:sefatuter@example.com)  
-*(E-posta adresinizi buraya ekleyebilirsiniz.)*
+## License
+
+This project is licensed with [MIT License](LICENSE). You can review the license file for details.
+
+## Contact
+
+For questions or support requests: [1sefatuter@gmail.com](mailto:1sefatuter@gmail.com)  
 
 ---
-
-Bu README, ChatDocs’un her türlü doküman ve veriyle çalışabildiğini vurgular şekilde düzenlendi. Eğer projenizin teknik detaylarını (örneğin, hangi veri türlerini desteklediği, kullanılan kütüphaneler) eklerseniz, içeriği daha da özelleştirebilirim. ChatDocs ismiyle ilerlemekten memnun musunuz? Başka bir şey eklemek ister misiniz?
