@@ -1,12 +1,11 @@
-# retrieval_chain.py
 from langchain_ollama import OllamaLLM
 from vector_store import search_documents
-from config import OLLAMA_BASE_URL, OLLAMA_MODEL
+from config import OLLAMA_API_BASE, OLLAMA_MODEL
 import re
 
 
 # Initialize Ollama LLM
-ollama = OllamaLLM(base_url=OLLAMA_BASE_URL, model=OLLAMA_MODEL)
+ollama = OllamaLLM(base_url=OLLAMA_API_BASE, model=OLLAMA_MODEL)
 
 def get_response(question, chat_history=[]):
     """Retrieve relevant documents and generate a response"""
@@ -20,7 +19,6 @@ def get_response(question, chat_history=[]):
     # print(context) 
     # print("===================================================================")
 
-    # ✅ Properly formatted input for Ollama
     formatted_prompt = f"""
         You are a highly efficient assistant with expertise in analyzing diverse documents. Use the provided context to answer the user's question as accurately and concisely as possible.
 

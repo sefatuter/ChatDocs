@@ -17,5 +17,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application files
 COPY . .
 
+EXPOSE 5000
+
 # Run Flask application
 CMD ["flask", "run", "--host=0.0.0.0"]

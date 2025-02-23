@@ -8,15 +8,16 @@ services:
       - ollama_data:/root/.ollama
     ports:
       - "11434:11434"
-    networks:
-      - mynetwork
     restart: unless-stopped
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434  # Bind to all interfaces on port 11434 !!!
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:11434"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 30s
+    command: ["ollama", "serve"]  # Keep the basic serve command
 
   postgres:
     build: ./db
@@ -30,8 +31,6 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - mynetwork
     restart: always
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
@@ -57,14 +56,8 @@ services:
         condition: service_healthy
       ollama:
         condition: service_healthy
-    networks:
-      - mynetwork
     restart: always
 
 volumes:
   pgdata:
   ollama_data:
-
-networks:
-  mynetwork:
-    driver: bridge
