@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatdocs-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatdocs-app
+  template:
+    metadata:
+      labels:
+        app: chatdocs-app
+    spec:
+      containers:
+        - name: chatdocs-app
+          image: usersefa/chatdocs-flask-app:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: PGHOST
+              valueFrom:
+                configMapKeyRef:
+                  name: chatdocs-config
+                  key: PGHOST
+            - name: PGDATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: chatdocs-config
+                  key: PGDATABASE
+            - name: PGPORT
+              valueFrom:
+                configMapKeyRef:
+                  name: chatdocs-config
+                  key: PGPORT
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: chatdocs-db-secret
+                  key: POSTGRES_USER
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: chatdocs-db-secret
+                  key: POSTGRES_PASSWORD
+            - name: LLM_API_URL 
+              value: "http://ollama:11434"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chatdocs-service
+spec:
+  type: ClusterIP
+  selector:
+    app: chatdocs-app
+  ports:
+    - port: 5000
+      targetPort: 5000
