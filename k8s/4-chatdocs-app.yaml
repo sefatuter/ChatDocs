@@ -44,7 +44,7 @@ spec:
                   name: chatdocs-db-secret
                   key: POSTGRES_PASSWORD
             - name: LLM_API_URL 
-              value: "http://ollama:11434"
+              value: "http://chatdocs-ollama:11434"
           livenessProbe:
             httpGet:
               path: /
