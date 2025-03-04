@@ -22,8 +22,8 @@ Below are the steps for setting up the necessary components manually, including 
 - Setup Postgres Database
 ```
 sudo apt update
-sudo apt install postgresql postgresql-contrib
-sudo systemctl start postgresql.service
+sudo apt install postgresql
+sudo apt install postgresql-16-pgvector
 ```
 
 - Setting Up Environment
