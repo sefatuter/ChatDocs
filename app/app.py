@@ -14,26 +14,16 @@ UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-def has_documents():
-    """Check if there are any documents in the database"""
-    with conn.cursor() as cur:
-        cur.execute("SELECT COUNT(*) FROM structured_documents")
-        count = cur.fetchone()[0]
-    return count > 0
-
-def initialize_chat_history():
-    if 'chat_history' not in session:
-        session['chat_history'] = []
-
-def migrate_chat_history():
-    """Convert any raw markdown in existing chat history to HTML"""
-    if 'chat_history' in session:
-        for msg in session['chat_history']:
-            if msg['role'] == 'assistant' and not msg['message'].startswith('<'):
-                msg['message'] = markdown.markdown(msg['message'])
-        session.modified = True
+# Routes
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    return render_template('register.html')
 
 @app.route('/', methods=['GET', 'POST'])
+def login():
+    return render_template('login.html')
+
+@app.route('/upload', methods=['GET', 'POST'])
 def upload():
     create_table()
     documents_exist = has_documents()
@@ -112,6 +102,16 @@ def reset_database():
     session.pop('documents_loaded', None)
     session.pop('chat_history', None)
     return jsonify({"status": "success", "message": "Database reset successfully"}), 200
+
+# Functions
+
+def has_documents():
+    """Check if there are any documents in the database"""
+    with conn.cursor() as cur:
+        cur.execute("SELECT COUNT(*) FROM structured_documents")
+        count = cur.fetchone()[0]
+    return count > 0
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
