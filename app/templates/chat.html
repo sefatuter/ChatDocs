@@ -9,9 +9,9 @@
     const baseTitle = "Ask anything";
     let dotCount = 0;
     setInterval(() => {
-      dotCount = (dotCount + 1) % 4;  // cycles through 0, 1, 2, 3
+      dotCount = (dotCount + 1) % 4;
       document.title = baseTitle + " " + ".".repeat(dotCount);
-    }, 500);  // update every 500ms (adjust as desired)
+    }, 500);
   </script>
   <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
   <link rel="alternate icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -39,9 +39,9 @@
         {% if msg.role == "user" %}
           <div class="user-message">👤 You: {{ msg.message }}</div>
         {% else %}
-          <div class="assistant-message">
-            <strong>🤖 Assistant:</strong>
-            <span id="msg-{{ loop.index }}">{{ msg.message | safe }}</span>
+          <div class="assistant-message markdown-body">
+            <strong>🤖 Assistant:</strong> 
+            <div class="message-content">{{ msg.message | safe }}</div>
           </div>
         {% endif %}
       {% endfor %}
@@ -66,7 +66,7 @@
             </svg>
           </button>
         </div>
-        <button class="btn btn-primary" onclick="resetAndGoBack()">🗑️ Reset</button>
+        <button class="btn btn-danger" onclick="resetAndGoBack()">🗑️ Reset</button>
         <button class="btn btn-secondary" onclick="goBack()">🔙 Back</button>
       </div>
       
@@ -74,29 +74,32 @@
     let controller = null;
     let sendButton = document.querySelector(".send-button");
 
-    // Function to render all assistant messages as Markdown
     function renderMarkdown() {
         const assistantMessages = document.querySelectorAll('.assistant-message .message-content');
         assistantMessages.forEach(msg => {
-            msg.innerHTML = marked.parse(msg.textContent);
+            // Only parse if it's not already HTML content
+            if (!msg.innerHTML.trim().startsWith('<')) {
+                msg.innerHTML = marked.parse(msg.textContent);
+            }
         });
     }
 
-    // Auto-scroll to bottom
+    // Run renderMarkdown on page load to format existing messages
     document.addEventListener("DOMContentLoaded", function() {
+        renderMarkdown();
         setTimeout(() => {
           window.scrollTo({
             top: document.body.scrollHeight,
             behavior: 'smooth'
           });
         }, 100);
-      });
+    });
 
     function scrollToBottom() {
-    window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: 'smooth'
-    });
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'smooth'
+        });
     }
 
     function askQuestion() {
@@ -135,21 +138,21 @@
         stopBtn.style.display = "none";
         sendButton.style.display = "inline-block";
         if (data.response) {
-          chatBox.innerHTML += `<div class="assistant-message markdown-body"><strong>🤖 Assistant:</strong> <span>${marked.parse(data.response)}</span></div>`;
+          chatBox.innerHTML += `<div class="assistant-message markdown-body"><strong>🤖 Assistant:</strong> <div class="message-content">${data.response}</div></div>`;
           document.getElementById("question").value = "";
           chatBox.scrollTop = chatBox.scrollHeight;
           scrollToBottom();
         }
       })
       .catch(error => {
-        loadingOverlay.style.display = "none";;
+        loadingOverlay.style.display = "none";
         stopBtn.style.display = "none";
         sendButton.style.display = "inline-block";
         if (error.name !== 'AbortError') {
           console.error("Error:", error);
-          chatBox.innerHTML += `<div class="assistant-message markdown-body"><strong>🤖 Assistant:</strong> <span>Error occurred</span></div>`;
+          chatBox.innerHTML += `<div class="assistant-message markdown-body"><strong>🤖 Assistant:</strong> <div class="message-content">Error occurred</div></div>`;
         } else {
-          chatBox.innerHTML += `<div class="assistant-message markdown-body"><strong>🤖 Assistant:</strong> <span>Request stopped</span></div>`;
+          chatBox.innerHTML += `<div class="assistant-message markdown-body"><strong>🤖 Assistant:</strong> <div class="message-content">Request stopped</div></div>`;
         }
         chatBox.scrollTop = chatBox.scrollHeight;
       });
@@ -166,7 +169,7 @@
     }
 
     function goBack() {
-      window.location.href = "/";
+      window.location.href = "/upload";
     }
 
     function resetAndGoBack() {
@@ -178,7 +181,7 @@
           })
           .then(data => {
             if (data.status === "success") {
-              window.location.href = "/";
+              window.location.href = "/upload";
             }
           })
           .catch(error => console.error("Error resetting database:", error));
@@ -202,7 +205,7 @@
             chatBox.style.visibility = "visible";
             chatBox.style.opacity = "1";
         }
-      });
+    });
   </script>
 </body>
 </html>

@@ -52,7 +52,6 @@ def create_table():
             );
             CREATE TABLE IF NOT EXISTS chat_history (
                 id SERIAL PRIMARY KEY,
-                session_id VARCHAR(255) NOT NULL,
                 role TEXT NOT NULL,
                 message TEXT NOT NULL
             );

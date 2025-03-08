@@ -62,34 +62,29 @@
 
   <script>
     document.getElementById('uploadForm').addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent default form submission
+      event.preventDefault();
 
       const form = this;
       const loadingOverlay = document.getElementById('loadingOverlay');
       
-      // Show loading overlay
       loadingOverlay.style.display = 'flex';
 
-      // Create FormData object for file upload
       const formData = new FormData(form);
 
-      fetch('/', {
+      fetch('/upload', {
         method: 'POST',
         body: formData
       })
       .then(response => {
         if (!response.ok) throw new Error('Submission failed');
-        return response; // Flask redirects, so we don’t need JSON here
+        return response; 
       })
       .then(() => {
-        // Redirect to chat page (handled by Flask)
         window.location.href = "{{ url_for('chat') }}";
       })
       .catch(error => {
         console.error('Error:', error);
-        // Hide loading overlay on error
         loadingOverlay.style.display = 'none';
-        // Optionally display an error message (e.g., via flash in Flask)
       });
     });
   </script>

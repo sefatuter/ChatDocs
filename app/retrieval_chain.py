@@ -13,10 +13,6 @@ def get_response(question, chat_history=[]):
     # Extract content from retrieved documents
     context = "\n\n".join([doc[1] for doc in retrieved_docs]) 
     context = re.sub(r'\n{2,}', '\n', context)
-    #Debug
-    # print("===================================================================")
-    # print(context) 
-    # print("===================================================================")
 
     formatted_prompt = f"""
         You are a highly efficient assistant with expertise in analyzing diverse documents. Use the provided context to answer the user's question as accurately and concisely as possible.
@@ -38,9 +34,7 @@ def get_response(question, chat_history=[]):
 
         Keep the response focused, actionable, and optimized for the user’s needs.
         """
-    # Debug
-    # print("---------------------------------------------------------------")
-    # print(formatted_prompt)
+
     response = ollama.invoke(formatted_prompt, options={"num_ctx": 8192, "temperature": 0.5})
     return response
 

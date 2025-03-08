@@ -1,6 +1,8 @@
 :root {
-  --primary: #d73a49;
-  --primary-hover: #cb2431;
+  --primary: #e1c699;
+  --primary-hover: #c9a96b;
+  --danger: #d73a49;
+  --danger-hover: #cb2431;
   --secondary: #2d7dd2;
   --secondary-hover: #3a8ed8;
   --background: #0d1117;
@@ -200,6 +202,17 @@ input[type="text"]:focus {
 
 .btn-primary:hover {
   background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--box-shadow-hover);
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: var(--danger-hover);
   transform: translateY(-2px);
   box-shadow: var(--box-shadow-hover);
 }
