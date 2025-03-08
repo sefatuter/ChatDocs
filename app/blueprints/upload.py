@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 
 from data_loader import load_documents
-from vector_store import store_documents, create_table, conn
+from vector_store import store_documents
+from database_conn import create_table, conn
 from flask import current_app
 
 upload_bp = Blueprint('upload_rt', __name__, template_folder='templates')

@@ -1,10 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash
 import os
-import markdown
-from data_loader import load_documents
-from vector_store import store_documents, create_table, conn
-from retrieval_chain import get_response
-
+from flask import Flask
 from blueprints.chat import chat_bp
 from blueprints.upload import upload_bp
 from blueprints.account import account_bp

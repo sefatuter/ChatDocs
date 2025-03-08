@@ -1,7 +1,7 @@
 from flask import Blueprint, request, session, jsonify
 import markdown
 from retrieval_chain import get_response
-from vector_store import conn
+from database_conn import conn
 
 database_bp = Blueprint('database_rt', __name__, template_folder='templates')
 

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
-from vector_store import conn
+from database_conn import conn
 
 chat_bp = Blueprint('chat_rt', __name__, template_folder='templates')
 
