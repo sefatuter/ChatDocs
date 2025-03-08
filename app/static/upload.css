@@ -5,6 +5,9 @@
   --secondary: #2d7dd2;
   --secondary-hover: #3a8ed8;
   --secondary-glow: rgba(45, 125, 210, 0.3);
+  --danger: #d73a49;
+  --danger-hover: #cb2431;
+  --danger-glow: rgba(134, 35, 60, 0.3);
   --background: #0d1117;
   --surface: #161b22;
   --surface-raised: #1c2129;
@@ -358,12 +361,26 @@ input[type="password"]{
 .btn-primary {
   background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   color: white;
+  text-decoration: none;
 }
 
 .btn-primary:hover {
   background: linear-gradient(135deg, var(--primary-hover), var(--primary));
   transform: translateY(-4px) scale(1.03);
   box-shadow: 0 6px 15px var(--primary-glow), 0 2px 5px rgba(0, 0, 0, 0.2);
+  letter-spacing: 1.5px;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, var(--danger), var(--danger-hover));
+  color: white;
+  text-decoration: none;
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, var(--danger-hover), var(--danger));
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 6px 15px var(--danger-glow), 0 2px 5px rgba(0, 0, 0, 0.2);
   letter-spacing: 1.5px;
 }
 

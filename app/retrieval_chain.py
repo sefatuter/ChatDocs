@@ -2,13 +2,15 @@ from langchain_ollama import OllamaLLM
 from vector_store import search_documents
 from config import OLLAMA_API_BASE, OLLAMA_BASE_URL , OLLAMA_MODEL # Use OLLAMA_BASE_URL if running locally, Use OLLAMA_API_BASE for docker build
 import re
+from flask import session
 
 # Initialize Ollama LLM
 ollama = OllamaLLM(base_url=OLLAMA_BASE_URL, model=OLLAMA_MODEL)
 
 def get_response(question, chat_history=[]):
     """Retrieve relevant documents and generate a response"""
-    retrieved_docs = search_documents(question)
+    user_id = session['user_id']
+    retrieved_docs = search_documents(user_id, question)
     
     # Extract content from retrieved documents
     context = "\n\n".join([doc[1] for doc in retrieved_docs]) 

@@ -51,6 +51,10 @@
         {% if documents_exist %}
           <a href="{{ url_for('chat_rt.chat') }}" class="btn btn-secondary">Chat</a>
         {% endif %}
+
+        {% if session['user_id'] %}
+          <a href="{{ url_for('account_rt.logout') }}" class="btn btn-danger">Logout</a>
+        {% endif %}
       </div>
     </form>
   </div>

@@ -36,8 +36,8 @@
 
     <div class="chat-container markdown-body" id="chat-box">
       {% for msg in chat_history %}
-        {% if msg.role == "user" %}
-          <div class="user-message">👤 You: {{ msg.message }}</div>
+        {% if msg.role == session['username'] %}
+          <div class="user-message">👤 {{ session['username'] }}: {{ msg.message }}</div>
         {% else %}
           <div class="assistant-message markdown-body">
             <strong>🤖 Assistant:</strong> 
@@ -110,7 +110,7 @@
       let loadingIndicator = document.getElementById("loadingOverlay");
       let stopBtn = document.getElementById("stopBtn");
 
-      chatBox.innerHTML += `<div class="user-message">👤 You: ${question}</div>`;
+      chatBox.innerHTML += `<div class="user-message">👤 {{ session['username'] }}: ${question}</div>`;
       document.getElementById("question").value = "";
       loadingIndicator.style.display = "block";
       scrollToBottom();
