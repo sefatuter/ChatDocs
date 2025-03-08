@@ -1,10 +1,10 @@
 from langchain_ollama import OllamaLLM
 from vector_store import search_documents
-from config import OLLAMA_API_BASE, OLLAMA_BASE_URL , OLLAMA_MODEL # Use OLLAMA_BASE_URL if running locally
+from config import OLLAMA_API_BASE, OLLAMA_BASE_URL , OLLAMA_MODEL # Use OLLAMA_BASE_URL if running locally, Use OLLAMA_API_BASE for docker build
 import re
 
 # Initialize Ollama LLM
-ollama = OllamaLLM(base_url=OLLAMA_API_BASE, model=OLLAMA_MODEL)
+ollama = OllamaLLM(base_url=OLLAMA_BASE_URL, model=OLLAMA_MODEL)
 
 def get_response(question, chat_history=[]):
     """Retrieve relevant documents and generate a response"""

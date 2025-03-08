@@ -109,7 +109,7 @@
       {% endif %}
     {% endwith %}
 
-    <form method="POST" action="{{ url_for('login') }}">
+    <form method="POST" action="{{ url_for('account_rt.login') }}">
       <div class="form-group">
         <label for="username">Username:</label>
         <div style="position: relative;">
@@ -137,7 +137,7 @@
     </form>
     
     <div class="auth-footer">
-      Don't have an account? <a href="{{ url_for('register') }}">Register</a>
+      Don't have an account? <a href="{{ url_for('account_rt.register') }}">Register</a>
     </div>
   </div>
 

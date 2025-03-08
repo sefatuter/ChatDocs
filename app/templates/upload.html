@@ -49,7 +49,7 @@
       <div class="button-group">
         <button type="submit" class="btn btn-primary">Submit</button>
         {% if documents_exist %}
-          <a href="{{ url_for('chat') }}" class="btn btn-secondary">Chat</a>
+          <a href="{{ url_for('chat_rt.chat') }}" class="btn btn-secondary">Chat</a>
         {% endif %}
       </div>
     </form>
@@ -80,7 +80,7 @@
         return response; 
       })
       .then(() => {
-        window.location.href = "{{ url_for('chat') }}";
+        window.location.href = "{{ url_for('chat_rt.chat') }}";
       })
       .catch(error => {
         console.error('Error:', error);
