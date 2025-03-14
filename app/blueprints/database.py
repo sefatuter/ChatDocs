@@ -1,7 +1,15 @@
-from flask import Blueprint, request, session, jsonify
+from flask import Blueprint, request, session, jsonify, render_template
 import markdown
 from retrieval_chain import get_response
 from database_conn import pool
+import psycopg2
+
+DEFAULT_DB_CONFIG = {
+    "host": "localhost",
+    "port": "5432",
+    "user": "postgres",
+    "password": "psql1234",
+}
 
 database_bp = Blueprint('database_rt', __name__, template_folder='templates')
 
@@ -71,3 +79,91 @@ def reset_database():
         return jsonify({"error": "Failed to reset user database"}), 500
     finally:
         pool.putconn(conn)
+        
+@database_bp.route('/databases', methods=['GET', 'POST'])
+def get_db():        
+    """Render database selection page"""
+    if request.method == 'POST':
+        selected_db = request.form.get('database')
+        session['selected_db'] = selected_db
+        tables = get_tables(selected_db) if selected_db else []
+    else:
+        selected_db = session.get("selected_db", "")
+        tables = get_tables(selected_db) if selected_db else []
+    
+    databases = get_databases()
+    return render_template("database.html", databases=databases, selected_db=selected_db, tables=tables)
+
+@database_bp.route("/execute_query", methods=["POST"])
+def execute_query():
+    """Execute SQL query on the selected database"""
+    selected_db = session.get("selected_db")
+    
+    print("Selected Database:", selected_db)
+    if not selected_db:
+        return jsonify({"error": "No database selected"}), 400
+    
+    query = request.form.get("query")
+    print("Executing Query:", query)
+    if not query:
+        return jsonify({"error": "No SQL query provided"}), 400
+
+    try:
+        conn = psycopg2.connect(**DEFAULT_DB_CONFIG, dbname=selected_db)
+        cur = conn.cursor()
+        cur.execute(query)
+
+        if query.strip().lower().startswith("select"):
+            results = cur.fetchall()
+            print(results)
+            columns = [desc[0] for desc in cur.description]
+            cur.close()
+            conn.close()
+            return render_template("database.html", selected_db=selected_db, tables=get_tables(selected_db), result=results, columns=columns, databases=get_databases())
+
+        else:
+            # Commit for INSERT, UPDATE, DELETE
+            conn.commit()
+            cur.close()
+            conn.close()
+            return render_template("database.html", selected_db=selected_db, tables=get_tables(selected_db), message="Query executed successfully", databases=get_databases())
+
+    except psycopg2.ProgrammingError as e:
+        conn.rollback()  # Rollback in case of error
+        return render_template("database.html", selected_db=selected_db, tables=get_tables(selected_db), error=f"SQL Error: {str(e)}", databases=get_databases())
+
+    except psycopg2.Error as e:
+        return render_template("database.html", selected_db=selected_db, tables=get_tables(selected_db), error=f"Database Error: {str(e)}", databases=get_databases())
+
+    finally:
+        if conn:
+            conn.close()
+
+
+def get_databases():
+    """Fetch all databases in PostgreSQL"""
+    try:
+        conn = psycopg2.connect(**DEFAULT_DB_CONFIG)
+        cur = conn.cursor()
+        cur.execute("SELECT datname FROM pg_database WHERE datistemplate = false;")
+        databases = [row[0] for row in cur.fetchall()]
+        cur.close()
+        conn.close()
+        return databases
+    except Exception as e:
+        print("Error fetching databases:", e)
+        return []
+
+def get_tables(dbname):
+    """Fetch tables from the selected database"""
+    try:
+        conn = psycopg2.connect(**DEFAULT_DB_CONFIG, dbname=dbname)
+        cur = conn.cursor()
+        cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';")
+        tables = [row[0] for row in cur.fetchall()]
+        cur.close()
+        conn.close()
+        return tables
+    except Exception as e:
+        print("Error fetching tables:", e)
+        return []

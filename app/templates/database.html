@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ChatDocs - Assistant</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+  <link rel="alternate icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='db.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-dark.min.css">
+</head>
+<body>
+  <div class="title-container">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="40" height="40">
+      <defs>
+        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#336791;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#1C3D59;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <rect x="6" y="8" width="20" height="26" fill="white" stroke="#336791" stroke-width="2" rx="3"/>
+      <polygon points="6,8 16,8 6,18" fill="#c9d1d9"/>
+      <rect x="24" y="28" width="10" height="3" fill="#1C3D59" transform="rotate(45 24 28)"/>
+      <circle cx="24" cy="24" r="8" fill="none" stroke="url(#grad1)" stroke-width="2"/>
+    </svg>
+    <h1>ChatDocs</h1>
+  </div>
+
+  <div class="container">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <a href="{{ url_for('upload_rt.upload') }}" class="btn btn-secondary">Back</a>
+
+
+    <form action="/databases" method="post">
+      <h3>Select a Database:</h3>
+      <select name="database" onchange="this.form.submit()">
+        <option value="">-- Select a Database --</option>
+        {% for db in databases %}
+          <option value="{{ db }}" {% if db == selected_db %}selected{% endif %}>{{ db }}</option>
+        {% endfor %}
+      </select>
+    </form>    
+
+
+    {% if selected_db %}
+      <h3>Execute SQL Query on {{ selected_db }}</h3>
+      <form action="/execute_query" method="post">
+        <textarea name="query" rows="4" cols="50" placeholder="Enter SQL query here"></textarea><br>
+        <button type="submit">Run Query</button>
+      </form>
+    {% else %}
+      <p style="color: red;">No database selected. Please choose one above.</p>
+    {% endif %}
+
+
+    {% if selected_db %}
+      <h3>Tables in {{ selected_db }}:</h3>
+      {% if tables %}
+        <ul>
+          {% for table in tables %}
+            <li>{{ table }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No tables found in this database.</p>
+      {% endif %}
+    {% endif %}
+
+      
+    {% if result %}
+    <hr>
+    <h3>Query Results:</h3>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            {% for column in columns %}
+              <th>{{ column }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in result %}
+            <tr>
+              {% for cell in row %}
+                <td>{{ cell }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
+  <script>
+    document.getElementById('databaseSelect').addEventListener('change', function() {
+      const dbname = this.value;
+      if (!dbname) return;
+
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      loadingOverlay.style.display = 'flex';
+
+      fetch("/get_tables", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ dbname: dbname })
+      })
+      .then(response => response.json())
+      .then(data => {
+        let tableList = document.getElementById("tables");
+        tableList.innerHTML = "";
+        if (data.tables) {
+          data.tables.forEach(table => {
+            let li = document.createElement("li");
+            li.textContent = table;
+            tableList.appendChild(li);
+          });
+        }
+        loadingOverlay.style.display = 'none';
+      })
+      .catch(error => {
+        console.error("Error fetching tables:", error);
+        loadingOverlay.style.display = 'none';
+      });
+    });
+
+    document.getElementById('uploadForm')?.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      loadingOverlay.style.display = 'flex';
+      const formData = new FormData(this);
+    });
+  </script>
+</body>
+</html>
