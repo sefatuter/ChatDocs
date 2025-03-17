@@ -35,7 +35,6 @@
     {% endwith %}
     <a href="{{ url_for('upload_rt.upload') }}" class="btn btn-secondary">Back</a>
 
-
     <form action="/databases" method="post">
       <h3>Select a Database:</h3>
       <select name="database" onchange="this.form.submit()">
@@ -46,17 +45,15 @@
       </select>
     </form>    
 
-
     {% if selected_db %}
-      <h3>Execute SQL Query on {{ selected_db }}</h3>
-      <form action="/execute_query" method="post">
-        <textarea name="query" rows="4" cols="50" placeholder="Enter SQL query here"></textarea><br>
-        <button type="submit">Run Query</button>
+      <h3>Enter Prompt to run on {{ selected_db }}</h3>
+      <form action="/execute_prompt" method="post">
+        <textarea name="prompt" rows="4" cols="50" placeholder="Enter prompt here"></textarea><br>
+        <button type="submit">Run</button>
       </form>
     {% else %}
       <p style="color: red;">No database selected. Please choose one above.</p>
     {% endif %}
-
 
     {% if selected_db %}
       <h3>Tables in {{ selected_db }}:</h3>
@@ -71,31 +68,62 @@
       {% endif %}
     {% endif %}
 
+    {% if final_query %}
+      <hr>
+      <h3>Generated SQL Query:</h3>
+      <div class="query-code">
+        <pre><code>{{ final_query }}</code></pre>
+      </div>
+    {% endif %}
+      
+    {% if nl_response %}
+      <hr>
+      <h3>Natural Language Response:</h3>
+      <div class="nl-response">
+        {{ nl_response }}
+      </div>
+    {% endif %}
       
     {% if result %}
     <hr>
-    <h3>Query Results:</h3>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            {% for column in columns %}
-              <th>{{ column }}</th>
-            {% endfor %}
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in result %}
+      <h3>Query Results:</h3>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
             <tr>
-              {% for cell in row %}
-                <td>{{ cell }}</td>
+              {% for column in columns %}
+                <th>{{ column }}</th>
               {% endfor %}
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  {% endif %}
+          </thead>
+          <tbody>
+            {% for row in result %}
+              <tr>
+                {% for cell in row %}
+                  <td>{{ cell }}</td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+      
+    {% if error %}
+      <hr>
+      <div class="error-message">
+        <h3>Error:</h3>
+        <p>{{ error }}</p>
+      </div>
+    {% endif %}
+      
+    {% if message %}
+      <hr>
+      <div class="success-message">
+        <h3>Success:</h3>
+        <p>{{ message }}</p>
+      </div>
+    {% endif %}
   </div>
 
   <!-- Loading Overlay -->
@@ -104,7 +132,7 @@
   </div>
 
   <script>
-    document.getElementById('databaseSelect').addEventListener('change', function() {
+    document.getElementById('databaseSelect')?.addEventListener('change', function() {
       const dbname = this.value;
       if (!dbname) return;
 
@@ -135,11 +163,11 @@
       });
     });
 
-    document.getElementById('uploadForm')?.addEventListener('submit', function(event) {
-      event.preventDefault();
-      const loadingOverlay = document.getElementById('loadingOverlay');
-      loadingOverlay.style.display = 'flex';
-      const formData = new FormData(this);
+    // Show loading overlay when submitting natural language query
+    document.querySelectorAll('form').forEach(form => {
+      form.addEventListener('submit', function() {
+        document.getElementById('loadingOverlay').style.display = 'flex';
+      });
     });
   </script>
 </body>

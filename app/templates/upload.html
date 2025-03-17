@@ -50,7 +50,7 @@
         <button type="submit" class="btn btn-primary">Submit</button>
         {% if documents_exist %}
           <a href="{{ url_for('chat_rt.chat') }}" class="btn btn-secondary">Chat</a>
-          <a href="{{ url_for('database_rt.get_db')}}" class="btn btn-info">DB</a>
+          <a href="{{ url_for('query_rt.get_db')}}" class="btn btn-info">DB</a>
         {% endif %}
 
         {% if session['user_id'] %}

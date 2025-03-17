@@ -4,6 +4,7 @@ from blueprints.chat import chat_bp
 from blueprints.upload import upload_bp
 from blueprints.account import account_bp
 from blueprints.database import database_bp
+from blueprints.query import query_bp
 
 app = Flask(__name__, static_folder='static')
 app.secret_key = os.getenv("FLASK_SECRET", "secret_key")
@@ -16,6 +17,7 @@ app.register_blueprint(chat_bp)
 app.register_blueprint(upload_bp)
 app.register_blueprint(account_bp)
 app.register_blueprint(database_bp)
+app.register_blueprint(query_bp)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)

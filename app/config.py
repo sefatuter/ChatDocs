@@ -11,3 +11,12 @@ OLLAMA_BASE_URL = "http://localhost:11434"
 OLLAMA_MODEL = "qwen2.5:1.5b"
 
 EMBEDDING_DIM = 384
+
+DEFAULT_DB_CONFIG = {
+    "host": "localhost",
+    "port": "5432",
+    "user": "postgres",
+    "password": "psql1234",
+}
+
+NVIDIA_API_KEY = os.getenv("NVIDIA_API_KEY", "your-api-key") # Enter with your email https://build.nvidia.com/explore/discover and get free 1000 api calls.
